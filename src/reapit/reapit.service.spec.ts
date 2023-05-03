@@ -67,7 +67,9 @@ describe('ReapitService', () => {
       service.fetchFromReapit = mockFetchFromReapit;
       service.buildUrl = mockBuildUrl;
       await service.fetchProperty('123');
-      expect(mockBuildUrl).toHaveBeenCalledWith(undefined, '/properties/123');
+      expect(mockBuildUrl).toHaveBeenCalledWith(undefined, '/properties/123', {
+        embed: 'images',
+      });
       expect(mockFetchFromReapit).toHaveBeenCalledWith(
         'https://test123/properties/123',
       );
