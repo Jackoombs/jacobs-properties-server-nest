@@ -6,12 +6,6 @@ import { PropertyImageModel } from '@reapit/foundations-ts-definitions';
 
 @Injectable()
 export class ImageService {
-  private readonly imagekit = new ImageKit({
-    publicKey: 'public_4LM2PTPwrb1Le2NlI1aDbdce/A4=',
-    privateKey: process.env.IMAGEKIT_KEY,
-    urlEndpoint: 'https://ik.imagekit.io/k6joqq39e',
-  });
-
   async processAllImages(images: PropertyImageModel[]) {
     for (const [index, image] of images.entries()) {
       if (index === 0) {
@@ -54,7 +48,13 @@ export class ImageService {
   }
 
   async uploadImage(image: Buffer, fileName: string, dirName: string) {
-    await this.imagekit.upload({
+    const imagekit = new ImageKit({
+      publicKey: 'public_4LM2PTPwrb1Le2NlI1aDbdce/A4=',
+      privateKey: process.env.IMAGEKIT_KEY,
+      urlEndpoint: 'https://ik.imagekit.io/k6joqq39e',
+    });
+
+    await imagekit.upload({
       file: image,
       fileName: fileName,
       folder: dirName,
