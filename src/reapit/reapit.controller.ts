@@ -3,7 +3,7 @@ import { ReapitService } from './reapit.service';
 import { FormattedProperty, ReapitWebhook, AllowedStatus } from '../types';
 import { PropertyService } from '../property/property.service';
 import { DataService } from '../data/data.service';
-import { ImageService } from 'src/image/image.service';
+import { ImageService } from '../image/image.service';
 
 @Controller('reapit')
 export class ReapitController {
