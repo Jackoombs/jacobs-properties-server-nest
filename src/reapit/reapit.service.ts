@@ -15,7 +15,6 @@ export class ReapitService {
         connectOAuthUrl: process.env.CONNECT_OAUTH_URL,
       });
     const accessToken = await reapitConnectSession.connectAccessToken();
-    console.log(accessToken);
     return accessToken;
   }
 
@@ -26,7 +25,6 @@ export class ReapitService {
       ['reapit-customer']: process.env.REAPIT_CUSTOMER,
     };
     const accessToken = await this.getToken();
-    console.log(url);
     const res = await axios.get(url, {
       headers: {
         ...defaultHeaders,
