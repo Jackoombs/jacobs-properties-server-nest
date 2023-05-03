@@ -1,0 +1,126 @@
+[
+  {
+    "id": "OXF732018",
+    "type": "selling",
+    "propertyType": [],
+    "price": 329535,
+    "rooms": [
+      {
+        "name": "Drawing Room",
+        "dimensions": "12.14 sq m",
+        "dimensionsAlt": "",
+        "description": "Large"
+      },
+      {
+        "name": "Dining Room",
+        "dimensions": "43.83 sq m",
+        "dimensionsAlt": "",
+        "description": "New furniture"
+      },
+      {
+        "name": "Dining Room",
+        "dimensions": "48.83 sq m",
+        "dimensionsAlt": "",
+        "description": "New furniture"
+      },
+      {
+        "name": "Dining Room",
+        "dimensions": "8.10 sq m",
+        "dimensionsAlt": "",
+        "description": "Bright"
+      },
+      {
+        "name": "Bedroom",
+        "dimensions": "28.54 sq m",
+        "dimensionsAlt": "",
+        "description": "New furniture"
+      },
+      {
+        "name": "Drawing Room",
+        "dimensions": "45.17 sq m",
+        "dimensionsAlt": "",
+        "description": "New furniture"
+      }
+    ],
+    "images": [],
+    "floorplan": [],
+    "epc": [],
+    "created": "2023-04-28T13:55:33Z",
+    "location": {
+      "latitude": 0,
+      "longitude": 0
+    },
+    "status": "forSale",
+    "description": null,
+    "address1": "Johnston Mountains",
+    "address2": "",
+    "postcode": "KC79 4JI",
+    "bedrooms": 5,
+    "bathrooms": 3,
+    "receptions": 1,
+    "virtualTour": null,
+    "brochure": null
+  },
+  {
+    "id": "OXF732021",
+    "type": "selling",
+    "propertyType": [],
+    "status": "forSale",
+    "description": null,
+    "address1": "Cummerata Dale",
+    "address2": "",
+    "postcode": "LQ47 8EO",
+    "price": 1702259,
+    "bedrooms": 2,
+    "bathrooms": 1,
+    "receptions": 1,
+    "rooms": [
+      {
+        "name": "Kitchen",
+        "dimensions": "19.55 sq m",
+        "dimensionsAlt": "",
+        "description": "New furniture"
+      },
+      {
+        "name": "Bathroom",
+        "dimensions": "10.00 sq m",
+        "dimensionsAlt": "",
+        "description": "Bright"
+      },
+      {
+        "name": "Dining Room",
+        "dimensions": "9.47 sq m",
+        "dimensionsAlt": "",
+        "description": "Bright"
+      },
+      {
+        "name": "Kitchen",
+        "dimensions": "14.29 sq m",
+        "dimensionsAlt": "",
+        "description": "New furniture"
+      },
+      {
+        "name": "Living Room",
+        "dimensions": "17.39 sq m",
+        "dimensionsAlt": "",
+        "description": "Bright"
+      },
+      {
+        "name": "Bedroom",
+        "dimensions": "17.50 sq m",
+        "dimensionsAlt": "",
+        "description": "Large"
+      }
+    ],
+    "images": [],
+    "floorplan": [],
+    "epc": [],
+    "created": "2023-04-28T13:56:30Z",
+    "virtualTour": null,
+    "brochure": null,
+    "location": {
+      "latitude": 0,
+      "longitude": 0
+    }
+  }
+]
