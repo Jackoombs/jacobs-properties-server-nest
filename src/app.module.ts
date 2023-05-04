@@ -8,10 +8,21 @@ import { DataService } from './data/data.service';
 import { ImageService } from './image/image.service';
 import { EmailService } from './email/email.service';
 import { PropertyService } from './property/property.service';
+import { FormService } from './form/form.service';
+import { FormController } from './form/form.controller';
+import { UrlService } from './url/url.service';
+import { ConfigModule } from '@nestjs/config';
+import { AppBootstrapService } from './app-bootstrap/app-bootstrap.service';
+import { PropertyController } from './property/property.controller';
 
 @Module({
-  imports: [],
-  controllers: [AppController, ReapitController],
+  imports: [ConfigModule.forRoot()],
+  controllers: [
+    AppController,
+    ReapitController,
+    FormController,
+    PropertyController,
+  ],
   providers: [
     AppService,
     ReapitService,
@@ -20,6 +31,9 @@ import { PropertyService } from './property/property.service';
     ImageService,
     EmailService,
     PropertyService,
+    FormService,
+    UrlService,
+    AppBootstrapService,
   ],
 })
 export class AppModule {}
