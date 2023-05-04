@@ -17,14 +17,14 @@ export class DataService {
     }
   }
 
-  async writeJsonFile(filename: string, jsonData: object): Promise<void> {
+  async writeJsonFile(filename: string, jsonData: object) {
     try {
       const filePath = this.fileService.getFilePath(filename);
       const dirPath = this.fileService.getDirPath();
-      this.fileService.createDir(dirPath);
+      await this.fileService.createDir(dirPath);
 
       const fileData = JSON.stringify(jsonData, null, 2);
-      return fs.promises.writeFile(filePath, fileData, 'utf8');
+      await fs.promises.writeFile(filePath, fileData, 'utf8');
     } catch (error) {
       throw error;
     }
