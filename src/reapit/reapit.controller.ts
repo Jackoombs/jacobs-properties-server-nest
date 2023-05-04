@@ -2,7 +2,6 @@ import { Controller, Post, Body, Get } from '@nestjs/common';
 import { ReapitService } from './reapit.service';
 import { FormattedProperty, ReapitWebhook, AllowedStatus } from '../types';
 import { PropertyService } from '../property/property.service';
-import { DataService } from '../data/data.service';
 import { ImageService } from '../image/image.service';
 
 @Controller('reapit')
@@ -10,7 +9,6 @@ export class ReapitController {
   constructor(
     private readonly reapitService: ReapitService,
     private readonly propertyService: PropertyService,
-    private readonly dataService: DataService,
     private readonly imageService: ImageService,
   ) {}
 
@@ -21,9 +19,7 @@ export class ReapitController {
 
   @Post()
   async updateProperty(@Body() payload: ReapitWebhook) {
-    const properties = await this.dataService.readJsonFile<FormattedProperty[]>(
-      'properties.json',
-    );
+    const properties = await this.propertyService.readProperties();
     const property = await this.reapitService.fetchProperty(payload.entityId);
     const formattedProperty = this.propertyService.formatProperty(property);
     let updatedProperties: FormattedProperty[];
@@ -63,6 +59,6 @@ export class ReapitController {
       );
     }
 
-    await this.dataService.writeJsonFile('properties.json', updatedProperties);
+    await this.propertyService.writeProperties(updatedProperties);
   }
 }

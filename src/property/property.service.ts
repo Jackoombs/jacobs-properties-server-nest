@@ -1,12 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { FormattedProperty, Status } from 'src/types';
+import { FormattedProperty, Status } from '../types';
 import {
   PropertyModel,
   PropertyImageModel,
 } from '@reapit/foundations-ts-definitions';
+import { DataService } from '../data/data.service';
 
 @Injectable()
 export class PropertyService {
+  private readonly propertyFile = 'properties.json';
+  constructor(private readonly dataService: DataService) {}
+
   formatProperties(properties: PropertyModel[]): FormattedProperty[] {
     const formattedProperties = properties.map((property) => {
       return this.formatProperty(property);
@@ -59,6 +63,16 @@ export class PropertyService {
     formattedProperty.epc.sort((a, b) => a.order - b.order);
 
     return formattedProperty;
+  }
+
+  async writeProperties(properties: FormattedProperty[]) {
+    await this.dataService.writeJsonFile(this.propertyFile, properties);
+  }
+
+  async readProperties() {
+    return await this.dataService.readJsonFile<FormattedProperty[]>(
+      'properties.json',
+    );
   }
 
   updateProperty(
