@@ -34,10 +34,14 @@ export class ImageService {
     width: number,
     height: number,
   ) {
-    const res = await axios.get(url, { responseType: 'stream' });
-    const imageData = await res.data;
-    const resizedData = await this.resizeImage(imageData, width, height);
-    this.uploadImage(resizedData, fileName, dirName);
+    try {
+      const res = await axios.get(url, { responseType: 'stream' });
+      const imageData = await res.data;
+      const resizedData = await this.resizeImage(imageData, width, height);
+      await this.uploadImage(resizedData, fileName, dirName);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async resizeImage(image: Buffer, width: number, height: number) {
