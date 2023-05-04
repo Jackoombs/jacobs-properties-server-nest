@@ -1,18 +1,29 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { QueryParams } from 'src/types';
 import { ReapitService } from './reapit.service';
 import MockAdaptor from 'axios-mock-adapter';
 import { mockData } from './mockPropertyData';
 import axios from 'axios';
 import { ReapitConnectServerSession } from '@reapit/connect-session';
+import { UrlService } from '../url/url.service';
 
 describe('ReapitService', () => {
   let service: ReapitService;
+  const mockUrl = 'https://mockUrl.com/';
+  const mockUrlService = { buildUrl: jest.fn().mockReturnValue(mockUrl) };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ReapitService],
-    }).compile();
+      providers: [
+        ReapitService,
+        { provide: UrlService, useValue: mockUrlService },
+      ],
+    })
+      .useMocker((token) => {
+        if (token === 'UrlService') {
+          return;
+        }
+      })
+      .compile();
 
     service = module.get<ReapitService>(ReapitService);
   });
@@ -60,27 +71,16 @@ describe('ReapitService', () => {
   describe('fetchProperty', () => {
     it('should call the dependant functions once', async () => {
       const mockFetchFromReapit = jest.fn();
-      const mockBuildUrl = jest
-        .fn()
-        .mockReturnValue('https://test123/properties/123');
 
       service.fetchFromReapit = mockFetchFromReapit;
-      service.buildUrl = mockBuildUrl;
       await service.fetchProperty('123');
-      expect(mockBuildUrl).toHaveBeenCalledWith(undefined, '/properties/123', {
-        embed: 'images',
-      });
-      expect(mockFetchFromReapit).toHaveBeenCalledWith(
-        'https://test123/properties/123',
-      );
+      expect(mockUrlService.buildUrl).toHaveBeenCalled();
+      expect(mockFetchFromReapit).toHaveBeenCalledWith(mockUrl);
     });
 
     it('should return the property', async () => {
       const mockFetchFromReapit = jest.fn().mockReturnValue(mockData.property);
-      const mockBuildUrl = jest.fn();
-
       service.fetchFromReapit = mockFetchFromReapit;
-      service.buildUrl = mockBuildUrl;
 
       expect(await service.fetchProperty('123')).toStrictEqual(
         mockData.property,
@@ -91,10 +91,7 @@ describe('ReapitService', () => {
       const mockFetchFromReapit = jest.fn(() =>
         Promise.reject(new Error('fetch error')),
       );
-      const mockBuildUrl = jest.fn();
-
       service.fetchFromReapit = mockFetchFromReapit;
-      service.buildUrl = mockBuildUrl;
 
       expect.assertions(1);
       try {
@@ -108,30 +105,17 @@ describe('ReapitService', () => {
   describe('fetchProperties', () => {
     it('should call the dependant functions once', async () => {
       const mockFetchFromReapit = jest.fn();
-      const mockBuildUrl = jest
-        .fn()
-        .mockReturnValue('https://test123/properties');
-
       service.fetchFromReapit = mockFetchFromReapit;
-      service.buildUrl = mockBuildUrl;
 
       await service.fetchProperties({ queryParams: true });
-      expect(mockBuildUrl).toHaveBeenCalledWith(undefined, '/properties', {
-        queryParams: true,
-      });
-      expect(mockFetchFromReapit).toHaveBeenCalledWith(
-        'https://test123/properties',
-      );
+      expect(mockFetchFromReapit).toHaveBeenCalledWith(mockUrl);
     });
 
     it('should return the property', async () => {
       const mockFetchFromReapit = jest
         .fn()
         .mockReturnValue(mockData.properties);
-      const mockBuildUrl = jest.fn();
-
       service.fetchFromReapit = mockFetchFromReapit;
-      service.buildUrl = mockBuildUrl;
 
       expect(await service.fetchProperties({ queryParam: true })).toStrictEqual(
         mockData.properties,
@@ -142,10 +126,7 @@ describe('ReapitService', () => {
       const mockFetchFromReapit = jest.fn(() =>
         Promise.reject(new Error('fetch error')),
       );
-      const mockBuildUrl = jest.fn();
-
       service.fetchFromReapit = mockFetchFromReapit;
-      service.buildUrl = mockBuildUrl;
 
       expect.assertions(1);
       try {
@@ -153,38 +134,6 @@ describe('ReapitService', () => {
       } catch (error) {
         expect(error.toString()).toContain('Error: fetch error');
       }
-    });
-  });
-
-  describe('buildUrl', () => {
-    it('should build url with given path', () => {
-      expect(service.buildUrl('https://test-site-name/', '/testPath')).toEqual(
-        'https://test-site-name/testPath',
-      );
-    });
-
-    it('should build url with simple queryParams', () => {
-      const queryParams: QueryParams = {
-        maxItems: 4,
-        type: 'test',
-      };
-
-      expect(
-        service.buildUrl('https://test-site-name/', '/testPath', queryParams),
-      ).toEqual('https://test-site-name/testPath?maxItems=4&type=test');
-    });
-
-    it('should build url with array queryParams', () => {
-      const queryParams: QueryParams = {
-        maxItems: [1, 2, 3],
-        type: ['test1', 'test2', 'test3'],
-      };
-
-      expect(
-        service.buildUrl('https://test-site-name/', '/testPath', queryParams),
-      ).toEqual(
-        'https://test-site-name/testPath?maxItems=1&maxItems=2&maxItems=3&type=test1&type=test2&type=test3',
-      );
     });
   });
 });
