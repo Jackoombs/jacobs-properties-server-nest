@@ -63,3 +63,77 @@ export interface ReapitWebhook {
   entityId: string;
   topicId: string;
 }
+
+export interface FormBase {
+  fullName: string;
+  email: string;
+  telephone: string;
+}
+
+export interface FormDates {
+  dates: [
+    {
+      date: '2023-02-28T00:00:00.000Z';
+      morning: true;
+      afternoon: true;
+      evening: false;
+    }[],
+  ];
+}
+
+export interface FormAddress {
+  postcode: string;
+  address: string;
+  houseNumber: string;
+  houseName: string;
+  apartment: string;
+  street: string;
+  dependantStreet: string;
+  bedrooms: string;
+  propertyType: string;
+}
+
+export interface MakeAnOffer extends FormBase {
+  offer: string;
+  message: string;
+}
+
+export interface GetInTouch extends FormBase {
+  message: string;
+}
+
+export interface ExpertValuation extends FormBase, FormAddress, FormDates {
+  buyOrRent: 'buy' | 'rent';
+}
+
+export interface InstantValuation extends FormBase, FormAddress {
+  buyOrRent: 'buy' | 'rent';
+}
+
+export interface EarlyBird extends FormBase {
+  buyOrRent: 'buy' | 'rent';
+  minPrice: string;
+  maxPrice: string;
+  minBedrooms: string;
+  radius: string;
+  propertyType: string;
+  location: string;
+}
+
+export interface BookAViewing extends FormBase, FormDates {
+  address: string;
+}
+
+export interface FormData
+  extends MakeAnOffer,
+    GetInTouch,
+    ExpertValuation,
+    InstantValuation,
+    ExpertValuation,
+    EarlyBird {}
+
+export type EnquiryType =
+  | 'Sales'
+  | 'Lettings'
+  | 'Sales Valuation'
+  | 'Lettings Valuation';
