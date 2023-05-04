@@ -1,4 +1,4 @@
-import { FormattedProperty } from 'src/types';
+import { FormattedProperty } from '../types';
 
 export const propertyList: FormattedProperty[] = [
   {
