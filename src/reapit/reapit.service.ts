@@ -73,4 +73,10 @@ export class ReapitService {
       throw error;
     }
   }
+
+  async deployFrontend() {
+    await axios.get(
+      'https://api.vercel.com/v1/integrations/deploy/prj_F0D98BtQnlDu3fu29cpc5Oox0ATX/YP9aF7lBJE',
+    );
+  }
 }

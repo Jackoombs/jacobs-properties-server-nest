@@ -66,6 +66,7 @@ export class AppBootstrapService implements OnApplicationBootstrap {
     ]);
     console.log(allProperties);
     await this.propertyService.writeProperties(allProperties);
+    await this.reapitService.deployFrontend();
     for (const property of allProperties) {
       await this.imageService.processAllImages(property.images);
     }

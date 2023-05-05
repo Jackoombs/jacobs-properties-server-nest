@@ -60,5 +60,6 @@ export class ReapitController {
     }
 
     await this.propertyService.writeProperties(updatedProperties);
+    await this.reapitService.deployFrontend();
   }
 }
