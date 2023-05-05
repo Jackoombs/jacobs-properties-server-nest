@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { FileService } from '../file/file.service';
-import * as fs from 'fs';
+import fs from 'fs';
 
 @Injectable()
 export class DataService {

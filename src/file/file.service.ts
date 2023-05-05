@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import * as path from 'path';
-import * as fs from 'fs';
+import path from 'path';
+import fs from 'fs';
 
 @Injectable()
 export class FileService {
@@ -19,6 +19,15 @@ export class FileService {
       fs.mkdirSync(dirPath, { recursive: true });
     } catch (error) {
       throw error;
+    }
+  }
+
+  removeExtension(fileName: string): string {
+    const index = fileName.lastIndexOf('.');
+    if (index !== -1) {
+      return fileName.slice(0, index);
+    } else {
+      return fileName;
     }
   }
 }

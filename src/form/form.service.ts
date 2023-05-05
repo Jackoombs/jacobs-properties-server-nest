@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { UrlService } from '../url/url.service';
 import axios from 'axios';
-import * as path from 'path';
+import path from 'path';
 import type { FormAddress } from '../types';
-import * as FormData from 'form-data';
+import FormData from 'form-data';
 import { FormData as FormDataType } from '../types';
 
 @Injectable()

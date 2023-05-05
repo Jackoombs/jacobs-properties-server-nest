@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import * as nodemailer from 'nodemailer';
+import nodemailer from 'nodemailer';
 import { EnquiryType, FormData } from '../types';
 
 @Injectable()
@@ -77,6 +77,7 @@ export class EmailService {
         result += `${indent}${key}: ${value}\n`;
       }
     }
-    return result.trim();
+    console.log(result);
+    return result;
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import * as path from 'path';
+import path from 'path';
 import { ReapitConnectServerSession } from '@reapit/connect-session';
 import { QueryParams, ReapitServerSessionHeaders } from '../types';
 import { PropertyModel } from '@reapit/foundations-ts-definitions';
