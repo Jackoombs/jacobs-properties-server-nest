@@ -29,7 +29,7 @@ export class EmailService {
     data: Partial<FormData>,
     enquiryType: EnquiryType = 'Sales',
   ) {
-    const { fullName, email, telephone, address } = data;
+    const { fullName = '', email = '', telephone = '', address = '' } = data;
     const body = this.formatInternetRegistrationsBody(
       enquiryType,
       data,
