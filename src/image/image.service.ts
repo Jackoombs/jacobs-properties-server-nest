@@ -1,25 +1,31 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import sharp from 'sharp';
 import ImageKit from 'imagekit';
 import axios from 'axios';
 import { PropertyImageModel } from '@reapit/foundations-ts-definitions';
+import { FileService } from '../file/file.service';
 
 @Injectable()
 export class ImageService {
+  constructor(
+    @Inject('IMAGE_KIT') private readonly imageKit: ImageKit,
+    private readonly fileService: FileService,
+  ) {}
   async processAllImages(images: PropertyImageModel[]) {
     for (const [index, image] of images.entries()) {
+      const fileName = this.fileService.removeExtension(image.id);
       if (index === 0) {
-        this.processImage(
+        await this.processImage(
           image.url,
-          image.id + '-sm.webp',
+          fileName + '-sm.webp',
           image.propertyId,
           450,
           300,
         );
       }
-      this.processImage(
+      await this.processImage(
         image.url,
-        image.id + '-lg.webp',
+        fileName + '-lg.webp',
         image.propertyId,
         825,
         550,
@@ -35,12 +41,12 @@ export class ImageService {
     height: number,
   ) {
     try {
-      const res = await axios.get(url, { responseType: 'stream' });
-      const imageData = await res.data;
+      const res = await axios.get(url, { responseType: 'arraybuffer' });
+      const imageData = Buffer.from(res.data, 'binary');
       const resizedData = await this.resizeImage(imageData, width, height);
       await this.uploadImage(resizedData, fileName, dirName);
     } catch (error) {
-      throw error;
+      console.log(error);
     }
   }
 
@@ -52,6 +58,7 @@ export class ImageService {
   }
 
   async uploadImage(image: Buffer, fileName: string, dirName: string) {
+    console.log(ImageKit);
     const imagekit = new ImageKit({
       publicKey: 'public_4LM2PTPwrb1Le2NlI1aDbdce/A4=',
       privateKey: process.env.IMAGEKIT_KEY,
@@ -65,5 +72,6 @@ export class ImageService {
       useUniqueFileName: false,
       overwriteFile: false,
     });
+    console.log('file uploaded');
   }
 }
