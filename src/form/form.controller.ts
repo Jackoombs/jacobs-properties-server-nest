@@ -2,6 +2,7 @@ import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
 import { EmailService } from '../email/email.service';
 import {
   BookAViewing,
+  BrochureForm,
   EarlyBird,
   EnquiryType,
   ExpertValuation,
@@ -110,6 +111,20 @@ export class FormController {
         data.buyOrRent === 'rent' ? 'Sales' : 'Lettings';
       await this.emailService.emailToInternetRegistrations(data, enquiryType);
       await this.formService.postToIntegratedMarketing('earlybird', data);
+    } catch (error) {
+      throw new BadRequestException('Something went wrong', {
+        cause: new Error(),
+        description: error.message,
+      });
+    }
+  }
+
+  @Post('/brochure')
+  async brochure(@Body() data: BrochureForm) {
+    try {
+      const enquiryType: EnquiryType =
+        data.buyOrRent === 'rent' ? 'Sales' : 'Lettings';
+      await this.emailService.emailToInternetRegistrations(data, enquiryType);
     } catch (error) {
       throw new BadRequestException('Something went wrong', {
         cause: new Error(),

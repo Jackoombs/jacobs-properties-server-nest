@@ -120,6 +120,12 @@ export interface EarlyBird extends FormBase {
   location: string;
 }
 
+export interface BrochureForm {
+  fullName: string;
+  email: string;
+  buyOrRent: 'buy' | 'rent';
+}
+
 export interface BookAViewing extends FormBase, FormDates {
   address: string;
 }
