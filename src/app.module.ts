@@ -14,6 +14,7 @@ import { UrlService } from './url/url.service';
 import { ConfigModule } from '@nestjs/config';
 import { AppBootstrapService } from './app-bootstrap/app-bootstrap.service';
 import { PropertyController } from './property/property.controller';
+import ImageKit from 'imagekit';
 
 @Module({
   imports: [ConfigModule.forRoot()],
@@ -34,6 +35,15 @@ import { PropertyController } from './property/property.controller';
     FormService,
     UrlService,
     AppBootstrapService,
+    {
+      provide: 'IMAGE_KIT',
+      useFactory: () =>
+        new ImageKit({
+          publicKey: 'public_4LM2PTPwrb1Le2NlI1aDbdce/A4=',
+          privateKey: process.env.IMAGEKIT_KEY,
+          urlEndpoint: 'https://ik.imagekit.io/k6joqq39e',
+        }),
+    },
   ],
 })
 export class AppModule {}
