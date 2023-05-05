@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { FileService } from '../file/file.service';
+import { DataService } from '../data/data.service';
 import {
   addExpectedList,
   removeExpectedList,
@@ -14,7 +16,7 @@ describe('PropertyService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [PropertyService],
+      providers: [PropertyService, DataService, FileService],
     }).compile();
 
     service = module.get<PropertyService>(PropertyService);
