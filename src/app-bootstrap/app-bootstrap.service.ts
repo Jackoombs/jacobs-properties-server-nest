@@ -1,14 +1,16 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { QueryParams } from '../types';
 import { ReapitService } from '../reapit/reapit.service';
-import * as schedule from 'node-schedule';
+import schedule from 'node-schedule';
 import { PropertyService } from '../property/property.service';
+import { ImageService } from '../image/image.service';
 
 @Injectable()
 export class AppBootstrapService implements OnApplicationBootstrap {
   constructor(
     private readonly reapitService: ReapitService,
     private readonly propertyService: PropertyService,
+    private readonly imageService: ImageService,
   ) {}
 
   async onApplicationBootstrap() {
@@ -22,7 +24,7 @@ export class AppBootstrapService implements OnApplicationBootstrap {
 
   async seedProperties() {
     const salesQueryParams: QueryParams = {
-      pageSize: 2,
+      pageSize: 100,
       embed: 'images',
       marketingMode: 'selling',
       sellingStatus: [
@@ -62,7 +64,10 @@ export class AppBootstrapService implements OnApplicationBootstrap {
       ...salesProperties,
       ...lettingsProperties,
     ]);
-
+    console.log(allProperties);
     await this.propertyService.writeProperties(allProperties);
+    for (const property of allProperties) {
+      await this.imageService.processAllImages(property.images);
+    }
   }
 }
