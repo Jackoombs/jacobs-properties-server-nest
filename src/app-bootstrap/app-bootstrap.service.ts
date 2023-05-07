@@ -17,7 +17,7 @@ export class AppBootstrapService implements OnApplicationBootstrap {
     await this.seedProperties();
 
     // eslint-disable-next-line
-    const job = schedule.scheduleJob('0 0 * * *', async function () {
+    const job = schedule.scheduleJob('0 0 * * *', async () => {
       await this.seedProperties();
     });
   }
