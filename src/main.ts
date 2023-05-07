@@ -9,7 +9,6 @@ async function bootstrap() {
     origin: ['https://www.jacobs.properties', 'http://localhost:3000'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar'],
     credentials: true,
   };
 
