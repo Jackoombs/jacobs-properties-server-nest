@@ -35,21 +35,18 @@ export class PropertyService {
       bathrooms: property.bathrooms,
       receptions: property.receptions,
       rooms: property.rooms,
-      images: property._embedded.images
-        ? (property._embedded.images.filter((i: PropertyImageModel) => {
-            return i.type.includes('photograph');
-          }) as PropertyImageModel[])
-        : [],
-      floorplan: property._embedded.images
-        ? (property._embedded.images.filter((i: PropertyImageModel) => {
-            return i.type.includes('floorPlan');
-          }) as PropertyImageModel[])
-        : [],
-      epc: property._embedded.images
-        ? (property._embedded.images.filter((i: PropertyImageModel) => {
-            return i.type.includes('epc');
-          }) as PropertyImageModel[])
-        : [],
+      images:
+        (property._embedded.images.filter((i: PropertyImageModel) => {
+          return i.type.includes('photograph');
+        }) as PropertyImageModel[]) ?? [],
+      floorplan:
+        (property._embedded.images.filter((i: PropertyImageModel) => {
+          return i.type.includes('floorPlan');
+        }) as PropertyImageModel[]) ?? [],
+      epc:
+        (property._embedded.images.filter((i: PropertyImageModel) => {
+          return i.type.includes('epc');
+        }) as PropertyImageModel[]) ?? [],
       created: property.created,
       virtualTour: property.videoUrl,
       brochure: property.selling
@@ -101,5 +98,10 @@ export class PropertyService {
     return propertyList.filter(
       (property) => property.id !== removedProperty.id,
     );
+  }
+
+  async getPropertyIds(): Promise<string[]> {
+    const properties = await this.readProperties();
+    return properties.map((property) => property.id);
   }
 }
