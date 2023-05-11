@@ -4,6 +4,7 @@ import { ReapitService } from '../reapit/reapit.service';
 import schedule from 'node-schedule';
 import { PropertyService } from '../property/property.service';
 import { ImageService } from '../image/image.service';
+import cron from 'node-cron';
 
 @Injectable()
 export class AppBootstrapService implements OnApplicationBootstrap {
@@ -19,6 +20,14 @@ export class AppBootstrapService implements OnApplicationBootstrap {
     // eslint-disable-next-line
     const job = schedule.scheduleJob('0 0 * * *', async () => {
       await this.seedProperties();
+    });
+
+    cron.schedule('0 7-21 * * *', async () => {
+      const currentDate = new Date();
+      let oneHourAgo: Date;
+      oneHourAgo.setTime(currentDate.getTime() - 3600000);
+      await this.updateModifiedProperties(oneHourAgo);
+      await this.updateModifiedImages(oneHourAgo);
     });
   }
 
@@ -53,22 +62,79 @@ export class AppBootstrapService implements OnApplicationBootstrap {
       internetAdvertising: true,
     };
 
-    const salesProperties = await this.reapitService.fetchProperties(
+    const properties = await this.reapitService.fetchProperties(
       salesQueryParams,
-    );
-    const lettingsProperties = await this.reapitService.fetchProperties(
       lettingsQueryParams,
     );
 
-    const allProperties = this.propertyService.formatProperties([
-      ...salesProperties,
-      ...lettingsProperties,
-    ]);
-    console.log(allProperties);
-    await this.propertyService.writeProperties(allProperties);
+    const formattedProperties =
+      this.propertyService.formatProperties(properties);
+
+    await this.propertyService.writeProperties(formattedProperties);
     await this.reapitService.deployFrontend();
-    for (const property of allProperties) {
+    for (const property of formattedProperties) {
       await this.imageService.processAllImages(property.images);
     }
+  }
+
+  async updateModifiedProperties(modifiedFrom: Date) {
+    const modifiedFromString = modifiedFrom.toISOString();
+
+    const salesQueryParams: QueryParams = {
+      pageSize: 100,
+      marketingMode: 'selling',
+      sellingStatus: [
+        'forSale',
+        'underOffer',
+        'reserved',
+        'exchanged',
+        'completed',
+        'soldExternally',
+      ],
+      internetAdvertising: true,
+      modifiedFrom: modifiedFromString,
+    };
+
+    const lettingsQueryParams: QueryParams = {
+      pageSize: 100,
+      marketingMode: 'selling',
+      sellingStatus: [
+        'forSale',
+        'underOffer',
+        'reserved',
+        'exchanged',
+        'completed',
+        'soldExternally',
+      ],
+      internetAdvertising: true,
+      modifiedFrom: modifiedFromString,
+    };
+
+    let properties = this.propertyService.formatProperties(
+      await this.reapitService.fetchProperties(
+        salesQueryParams,
+        lettingsQueryParams,
+      ),
+    );
+
+    for (const property of properties) {
+      properties = this.propertyService.updateProperty(property, properties);
+    }
+
+    await this.propertyService.writeProperties(properties);
+    await this.reapitService.deployFrontend();
+  }
+
+  async updateModifiedImages(modifiedFrom: Date) {
+    const propertyIds = await this.propertyService.getPropertyIds();
+    const queryParams: QueryParams = {
+      pageSize: 100,
+      propertyId: propertyIds,
+      modifiedFrom: modifiedFrom.toISOString(),
+      type: 'photograph',
+    };
+
+    const images = await this.reapitService.fetchImages(queryParams);
+    await this.imageService.processAllImages(images);
   }
 }
