@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import path from 'path';
 import { ReapitConnectServerSession } from '@reapit/connect-session';
 import { QueryParams, ReapitServerSessionHeaders } from '../types';
-import { PropertyModel } from '@reapit/foundations-ts-definitions';
+import {
+  PropertyImageModel,
+  PropertyModel,
+} from '@reapit/foundations-ts-definitions';
 import { UrlService } from '../url/url.service';
 import axios from 'axios';
 
@@ -21,7 +24,9 @@ export class ReapitService {
     return accessToken;
   }
 
-  async fetchFromReapit(url: string): Promise<PropertyModel | PropertyModel[]> {
+  async fetchFromReapit(
+    url: string,
+  ): Promise<PropertyModel | PropertyModel[] | PropertyImageModel[]> {
     const defaultHeaders: ReapitServerSessionHeaders = {
       ['api-version']: '2020-01-31',
       ['Content-Type']: 'application/json',
@@ -35,10 +40,10 @@ export class ReapitService {
       },
     });
     if (res.status === 200) {
-      const propertyRes = res.data.id ? res.data : res.data._embedded;
-      return propertyRes;
+      const data = res.data.id ? res.data : res.data._embedded;
+      return data;
     } else {
-      throw new Error('Properties not found');
+      throw new Error('Data not found');
     }
   }
 
@@ -60,15 +65,31 @@ export class ReapitService {
     }
   }
 
-  async fetchProperties(queryParams: QueryParams): Promise<PropertyModel[]> {
+  async fetchProperties(
+    salesQueryParams: QueryParams,
+    lettingsQueryParams: QueryParams,
+  ): Promise<PropertyModel[]> {
     try {
-      const url = this.urlService.buildUrl(
+      const salesUrl = this.urlService.buildUrl(
         process.env.PLATFORM_API_URL,
         '/properties',
-        queryParams,
+        salesQueryParams,
       );
-      const property = (await this.fetchFromReapit(url)) as PropertyModel[];
-      return property;
+
+      const lettingsUrl = this.urlService.buildUrl(
+        process.env.PLATFORM_API_URL,
+        '/properties',
+        lettingsQueryParams,
+      );
+
+      const salesProperties = (await this.fetchFromReapit(
+        salesUrl,
+      )) as PropertyModel[];
+      const lettingsProperties = (await this.fetchFromReapit(
+        lettingsUrl,
+      )) as PropertyModel[];
+
+      return [...salesProperties, ...lettingsProperties];
     } catch (error) {
       throw error;
     }
@@ -78,5 +99,19 @@ export class ReapitService {
     await axios.get(
       'https://api.vercel.com/v1/integrations/deploy/prj_F0D98BtQnlDu3fu29cpc5Oox0ATX/YP9aF7lBJE',
     );
+  }
+
+  async fetchImages(queryParams: QueryParams): Promise<PropertyImageModel[]> {
+    try {
+      const url = this.urlService.buildUrl(
+        process.env.PLATFORM_API_URL,
+        '/propertyImages',
+        queryParams,
+      );
+      const images = (await this.fetchFromReapit(url)) as PropertyImageModel[];
+      return images;
+    } catch (error) {
+      throw error;
+    }
   }
 }
