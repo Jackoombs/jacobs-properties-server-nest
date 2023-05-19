@@ -76,7 +76,7 @@ export class FormController {
       const type = data.buyOrRent === 'buy' ? 'sales' : 'lettings';
       const enquiryType: EnquiryType =
         data.buyOrRent === 'rent' ? 'Sales Valuation' : 'Lettings Valuation';
-      const valuation = await this.formService.getValPalValuation(
+      const valuationResults = await this.formService.getValPalValuation(
         {
           postcode: data.postcode,
           address: data.address,
@@ -90,12 +90,16 @@ export class FormController {
         },
         type,
       );
-      const dataWithValuation = { ...data, price: valuation };
+      const dataWithValuation = {
+        ...data,
+        price: valuationResults.results.valuation.replace('&pound;', '£'),
+      };
       await this.emailService.emailToInternetRegistrations(data, enquiryType);
       await this.formService.postToIntegratedMarketing(
         'instantvaluation',
         dataWithValuation,
       );
+      return valuationResults;
     } catch (error) {
       throw new BadRequestException('Something went wrong', {
         cause: new Error(),
