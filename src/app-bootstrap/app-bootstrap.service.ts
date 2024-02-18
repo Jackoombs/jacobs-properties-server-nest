@@ -4,7 +4,7 @@ import { ReapitService } from '../reapit/reapit.service';
 import schedule from 'node-schedule';
 import { PropertyService } from '../property/property.service';
 import { ImageService } from '../image/image.service';
-import cron from 'node-cron';
+import { CronJob } from 'cron';
 
 @Injectable()
 export class AppBootstrapService implements OnApplicationBootstrap {
@@ -17,18 +17,19 @@ export class AppBootstrapService implements OnApplicationBootstrap {
   async onApplicationBootstrap() {
     await this.seedProperties();
 
-    // eslint-disable-next-line
-    const job = schedule.scheduleJob('0 0 * * *', async () => {
+    const dailyReSeed = new CronJob('0 0 * * *', async () => {
       await this.seedProperties();
     });
 
-    cron.schedule('0 7-21 * * *', async () => {
+    const hourlyUpdate = new CronJob('0 7-21 * * *', async () => {
       const currentDate = new Date();
-      let oneHourAgo: Date;
-      oneHourAgo.setTime(currentDate.getTime() - 3600000);
+      const oneHourAgo = new Date(currentDate.getTime() - 3600000);
       await this.updateModifiedProperties(oneHourAgo);
       await this.updateModifiedImages(oneHourAgo);
     });
+
+    dailyReSeed.start();
+    hourlyUpdate.start();
   }
 
   async seedProperties() {
@@ -65,6 +66,14 @@ export class AppBootstrapService implements OnApplicationBootstrap {
     const properties = await this.reapitService.fetchProperties(
       salesQueryParams,
       lettingsQueryParams,
+    );
+
+    console.log(
+      properties.map((p) => ({
+        address: p.address.line1,
+        id: p.id,
+        type: p.marketingMode,
+      })),
     );
 
     const formattedProperties =
