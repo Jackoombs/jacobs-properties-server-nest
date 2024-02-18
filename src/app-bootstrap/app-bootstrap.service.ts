@@ -106,14 +106,15 @@ export class AppBootstrapService implements OnApplicationBootstrap {
 
     const lettingsQueryParams: QueryParams = {
       pageSize: 100,
-      marketingMode: 'selling',
-      sellingStatus: [
-        'forSale',
+      marketingMode: 'lettings',
+      lettingsStatus: [
+        'toLet',
         'underOffer',
-        'reserved',
-        'exchanged',
-        'completed',
-        'soldExternally',
+        'arrangingTenancy',
+        'tenancyCurrent',
+        'tenancyFinished',
+        'tenancyCurrentUnavailable',
+        'sold',
       ],
       internetAdvertising: true,
       modifiedFrom: modifiedFromString,

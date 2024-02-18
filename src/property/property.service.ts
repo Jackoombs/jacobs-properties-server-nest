@@ -20,7 +20,14 @@ export class PropertyService {
         (obj, index, self) =>
           index === self.findIndex((property) => property.id === obj.id),
       );
-    console.log(formattedProperties);
+    console.log(
+      formattedProperties.map((p) => ({
+        id: p.id,
+        address: p.address1,
+        mode: p.type,
+        status: p.status,
+      })),
+    );
     return formattedProperties;
   }
 
