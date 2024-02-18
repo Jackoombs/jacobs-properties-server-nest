@@ -45,9 +45,7 @@ export class ImageService {
       const imageData = Buffer.from(res.data, 'binary');
       const resizedData = await this.resizeImage(imageData, width, height);
       await this.uploadImage(resizedData, fileName, dirName);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 
   async resizeImage(image: Buffer, width: number, height: number) {
@@ -58,7 +56,6 @@ export class ImageService {
   }
 
   async uploadImage(image: Buffer, fileName: string, dirName: string) {
-    console.log(ImageKit);
     const imagekit = new ImageKit({
       publicKey: 'public_4LM2PTPwrb1Le2NlI1aDbdce/A4=',
       privateKey: process.env.IMAGEKIT_KEY,
@@ -72,6 +69,5 @@ export class ImageService {
       useUniqueFileName: false,
       overwriteFile: false,
     });
-    console.log('file uploaded');
   }
 }
