@@ -49,13 +49,14 @@ export class AppBootstrapService implements OnApplicationBootstrap {
     };
 
     const lettingsQueryParams: QueryParams = {
-      pageSize: 2,
+      pageSize: 100,
       embed: 'images',
       marketingMode: 'lettings',
       lettingsStatus: [
         'toLet',
         'underOffer',
         'arrangingTenancy',
+        'arrangingTenancyUnavailable',
         'tenancyCurrent',
         'tenancyFinished',
         'sold',
@@ -91,14 +92,15 @@ export class AppBootstrapService implements OnApplicationBootstrap {
 
     const salesQueryParams: QueryParams = {
       pageSize: 100,
-      marketingMode: 'selling',
-      sellingStatus: [
-        'forSale',
+      marketingMode: 'lettings',
+      lettingsStatus: [
+        'toLet',
         'underOffer',
-        'reserved',
-        'exchanged',
-        'completed',
-        'soldExternally',
+        'arrangingTenancy',
+        'arrangingTenancyUnavailable',
+        'tenancyCurrent',
+        'tenancyFinished',
+        'sold',
       ],
       internetAdvertising: true,
       modifiedFrom: modifiedFromString,
