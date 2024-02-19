@@ -20,15 +20,15 @@ export class AppBootstrapService implements OnApplicationBootstrap {
       await this.seedProperties();
     });
 
-    const hourlyUpdate = new CronJob('0 7-21 * * *', async () => {
-      const currentDate = new Date();
-      const oneHourAgo = new Date(currentDate.getTime() - 3600000);
-      await this.updateModifiedProperties(oneHourAgo);
-      await this.updateModifiedImages(oneHourAgo);
-    });
+    // const hourlyUpdate = new CronJob('0 7-21 * * *', async () => {
+    //   const currentDate = new Date();
+    //   const oneHourAgo = new Date(currentDate.getTime() - 3600000);
+    //   await this.updateModifiedProperties(oneHourAgo);
+    //   await this.updateModifiedImages(oneHourAgo);
+    // });
 
     dailyReSeed.start();
-    hourlyUpdate.start();
+    // hourlyUpdate.start();
   }
 
   async seedProperties() {
