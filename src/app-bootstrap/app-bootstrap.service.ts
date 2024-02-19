@@ -54,6 +54,7 @@ export class AppBootstrapService implements OnApplicationBootstrap {
       lettingStatus: [
         'toLet',
         'underOffer',
+        'arrangingTenancyUnavailable',
         'arrangingTenancy',
         'tenancyCurrent',
         'tenancyFinished',
