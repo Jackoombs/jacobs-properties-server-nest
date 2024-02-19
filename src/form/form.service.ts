@@ -51,7 +51,7 @@ export class FormService {
     const [status, errors, results] = valpalRes.data;
 
     if (status.status === 'success') {
-      return results;
+      return results.results.valuation.replace('&pound;', '£') as string;
     } else {
       throw new Error(errors.errors.message);
     }
