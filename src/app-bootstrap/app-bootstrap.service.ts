@@ -51,10 +51,9 @@ export class AppBootstrapService implements OnApplicationBootstrap {
       pageSize: 100,
       embed: 'images',
       marketingMode: 'lettings',
-      lettingsStatus: [
+      lettingStatus: [
         'toLet',
         'underOffer',
-        'arrangingTenancyUnavailable',
         'arrangingTenancy',
         'tenancyCurrent',
         'tenancyFinished',
@@ -107,7 +106,7 @@ export class AppBootstrapService implements OnApplicationBootstrap {
     const lettingsQueryParams: QueryParams = {
       pageSize: 100,
       marketingMode: 'lettings',
-      lettingsStatus: [
+      lettingStatus: [
         'toLet',
         'underOffer',
         'arrangingTenancyUnavailable',
