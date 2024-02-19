@@ -26,7 +26,6 @@ export class ReapitService {
 
   async fetchFromReapit(
     url: string,
-    params = {},
   ): Promise<PropertyModel | PropertyModel[] | PropertyImageModel[]> {
     const defaultHeaders: ReapitServerSessionHeaders = {
       ['api-version']: '2020-01-31',
@@ -39,7 +38,6 @@ export class ReapitService {
         ...defaultHeaders,
         Authorization: `Bearer ${accessToken}`,
       },
-      params,
     });
     if (res.status === 200) {
       const data = res.data.id ? res.data : res.data._embedded;
@@ -55,11 +53,12 @@ export class ReapitService {
       const url = this.urlService.buildUrl(
         process.env.PLATFORM_API_URL,
         urlPath,
+        {
+          embed: 'images',
+        },
       );
 
-      const property = (await this.fetchFromReapit(url, {
-        embed: 'images',
-      })) as PropertyModel;
+      const property = (await this.fetchFromReapit(url)) as PropertyModel;
       return property;
     } catch (error) {
       throw error;
@@ -74,20 +73,20 @@ export class ReapitService {
       const salesUrl = this.urlService.buildUrl(
         process.env.PLATFORM_API_URL,
         '/properties',
+        salesQueryParams,
       );
 
       const lettingsUrl = this.urlService.buildUrl(
         process.env.PLATFORM_API_URL,
         '/properties',
+        lettingsQueryParams,
       );
 
       const salesProperties = (await this.fetchFromReapit(
         salesUrl,
-        salesQueryParams,
       )) as PropertyModel[];
       const lettingsProperties = (await this.fetchFromReapit(
         lettingsUrl,
-        lettingsQueryParams,
       )) as PropertyModel[];
 
       return [...salesProperties, ...lettingsProperties];
@@ -107,11 +106,9 @@ export class ReapitService {
       const url = this.urlService.buildUrl(
         process.env.PLATFORM_API_URL,
         '/propertyImages',
-      );
-      const images = (await this.fetchFromReapit(
-        url,
         queryParams,
-      )) as PropertyImageModel[];
+      );
+      const images = (await this.fetchFromReapit(url)) as PropertyImageModel[];
       return images;
     } catch (error) {
       throw error;
