@@ -18,6 +18,7 @@ export class UrlService {
       }
     }
 
+    console.log(url.toString());
     return url.toString();
   }
 }

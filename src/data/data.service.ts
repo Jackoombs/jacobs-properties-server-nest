@@ -11,6 +11,7 @@ export class DataService {
       const filePath = this.fileService.getFilePath(fileName);
       const fileData = fs.readFileSync(filePath, 'utf8');
       const jsonData: T = JSON.parse(fileData);
+      console.log(jsonData);
       return jsonData;
     } catch (error) {
       throw error;
