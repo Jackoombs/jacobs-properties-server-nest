@@ -20,7 +20,14 @@ export class PropertyService {
         (obj, index, self) =>
           index === self.findIndex((property) => property.id === obj.id),
       );
-    console.log(formattedProperties);
+    console.log(
+      formattedProperties.map((p) => ({
+        id: p.id,
+        address: p.address1,
+        mode: p.type,
+        status: p.status,
+      })),
+    );
     return formattedProperties;
   }
 
@@ -42,15 +49,15 @@ export class PropertyService {
       receptions: property.receptions,
       rooms: property.rooms,
       images:
-        (property._embedded.images.filter((i: PropertyImageModel) => {
+        (property._embedded?.images?.filter((i: PropertyImageModel) => {
           return i.type.includes('photograph');
         }) as PropertyImageModel[]) ?? [],
       floorplan:
-        (property._embedded.images.filter((i: PropertyImageModel) => {
+        (property._embedded?.images?.filter((i: PropertyImageModel) => {
           return i.type.includes('floorPlan');
         }) as PropertyImageModel[]) ?? [],
       epc:
-        (property._embedded.images.filter((i: PropertyImageModel) => {
+        (property._embedded?.images?.filter((i: PropertyImageModel) => {
           return i.type.includes('epc');
         }) as PropertyImageModel[]) ?? [],
       created: property.created,
