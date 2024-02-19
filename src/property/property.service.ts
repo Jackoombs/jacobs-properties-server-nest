@@ -12,9 +12,14 @@ export class PropertyService {
   constructor(private readonly dataService: DataService) {}
 
   formatProperties(properties: PropertyModel[]): FormattedProperty[] {
-    const formattedProperties = properties.map((property) => {
-      return this.formatProperty(property);
-    });
+    const formattedProperties = properties
+      .map((property) => {
+        return this.formatProperty(property);
+      })
+      .filter(
+        (value, index, self) =>
+          index === self.findIndex((p) => p.id === value.id),
+      );
     return formattedProperties;
   }
 
