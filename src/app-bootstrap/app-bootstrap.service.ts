@@ -67,19 +67,11 @@ export class AppBootstrapService implements OnApplicationBootstrap {
       salesQueryParams,
       lettingsQueryParams,
     );
-
-    console.log(
-      properties.map((p) => ({
-        address: p.address.line1,
-        id: p.id,
-        type: p.marketingMode,
-      })),
-    );
-
     const formattedProperties =
       this.propertyService.formatProperties(properties);
 
     await this.propertyService.writeProperties(formattedProperties);
+    console.log(properties);
     await this.reapitService.deployFrontend();
     for (const property of formattedProperties) {
       await this.imageService.processAllImages(property.images);
