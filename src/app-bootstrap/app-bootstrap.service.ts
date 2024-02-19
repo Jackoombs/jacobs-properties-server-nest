@@ -1,7 +1,6 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { QueryParams } from '../types';
 import { ReapitService } from '../reapit/reapit.service';
-import schedule from 'node-schedule';
 import { PropertyService } from '../property/property.service';
 import { ImageService } from '../image/image.service';
 import { CronJob } from 'cron';
@@ -49,12 +48,13 @@ export class AppBootstrapService implements OnApplicationBootstrap {
     };
 
     const lettingsQueryParams: QueryParams = {
-      pageSize: 2,
+      pageSize: 100,
       embed: 'images',
       marketingMode: 'lettings',
       lettingsStatus: [
         'toLet',
         'underOffer',
+        'arrangingTenancyUnavailable',
         'arrangingTenancy',
         'tenancyCurrent',
         'tenancyFinished',
@@ -106,14 +106,15 @@ export class AppBootstrapService implements OnApplicationBootstrap {
 
     const lettingsQueryParams: QueryParams = {
       pageSize: 100,
-      marketingMode: 'selling',
-      sellingStatus: [
-        'forSale',
+      marketingMode: 'lettings',
+      lettingsStatus: [
+        'toLet',
         'underOffer',
-        'reserved',
-        'exchanged',
-        'completed',
-        'soldExternally',
+        'arrangingTenancyUnavailable',
+        'arrangingTenancy',
+        'tenancyCurrent',
+        'tenancyFinished',
+        'sold',
       ],
       internetAdvertising: true,
       modifiedFrom: modifiedFromString,
