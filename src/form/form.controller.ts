@@ -23,7 +23,6 @@ export class FormController {
   async bookAViewing(@Body() data: BookAViewing) {
     try {
       await this.emailService.emailToInternetRegistrations(data);
-      await this.formService.postToIntegratedMarketing('bookaviewing', data);
     } catch (error) {
       throw new BadRequestException('Something went wrong', {
         cause: new Error(),
@@ -35,7 +34,6 @@ export class FormController {
   async makeAnOffer(@Body() data: MakeAnOffer) {
     try {
       await this.emailService.emailToInternetRegistrations(data);
-      await this.formService.postToIntegratedMarketing('makeanoffer', data);
     } catch (error) {
       throw new BadRequestException('Something went wrong', {
         cause: new Error(),
@@ -48,7 +46,6 @@ export class FormController {
   async getInTouch(@Body() data: GetInTouch) {
     try {
       await this.emailService.emailToInternetRegistrations(data);
-      await this.formService.postToIntegratedMarketing('getintouch', data);
     } catch (error) {
       throw new BadRequestException('Something went wrong', {
         cause: new Error(),
@@ -62,7 +59,6 @@ export class FormController {
       const enquiryType: EnquiryType =
         data.buyOrRent === 'rent' ? 'Sales Valuation' : 'Lettings Valuation';
       await this.emailService.emailToInternetRegistrations(data, enquiryType);
-      await this.formService.postToIntegratedMarketing('expertvaluation', data);
     } catch (error) {
       throw new BadRequestException('Something went wrong', {
         cause: new Error(),
@@ -90,15 +86,7 @@ export class FormController {
         },
         type,
       );
-      const dataWithValuation = {
-        ...data,
-        price: valuationResults.results.valuation.replace('&pound;', '£'),
-      };
       await this.emailService.emailToInternetRegistrations(data, enquiryType);
-      await this.formService.postToIntegratedMarketing(
-        'instantvaluation',
-        dataWithValuation,
-      );
       return valuationResults;
     } catch (error) {
       throw new BadRequestException('Something went wrong', {
@@ -114,7 +102,6 @@ export class FormController {
       const enquiryType: EnquiryType =
         data.buyOrRent === 'rent' ? 'Sales' : 'Lettings';
       await this.emailService.emailToInternetRegistrations(data, enquiryType);
-      await this.formService.postToIntegratedMarketing('earlybird', data);
     } catch (error) {
       throw new BadRequestException('Something went wrong', {
         cause: new Error(),

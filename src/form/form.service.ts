@@ -1,31 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { UrlService } from '../url/url.service';
 import axios from 'axios';
-import path from 'path';
 import type { FormAddress } from '../types';
 import FormData from 'form-data';
-import { FormData as FormDataType } from '../types';
 
 @Injectable()
 export class FormService {
-  constructor(private readonly urlService: UrlService) {}
-
-  async postToIntegratedMarketing(
-    service: string,
-    data: Partial<FormDataType>,
-  ) {
-    const baseUrl = 'https://jacobsproperties.api.integratedinterest.com';
-    const endpoint = path.join('/form', service);
-    const urlWithEndPoint = this.urlService.buildUrl(baseUrl, endpoint);
-
-    return await axios.post(urlWithEndPoint, data, {
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.INTEGRATEDMARKETING_KEY,
-      },
-    });
-  }
-
   async getValPalValuation(address: FormAddress, type: 'lettings' | 'sales') {
     const formData = new FormData();
     formData.append('username', process.env.VALPAL_USERNAME);
