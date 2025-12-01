@@ -10,7 +10,7 @@ export class EmailService {
       port: 465,
       secure: true,
       auth: {
-        user: process.env.USERNAME,
+        user: 'jackg.coombs97@gmail.com',
         pass: process.env.PASSWORD,
       },
     });
@@ -77,7 +77,6 @@ export class EmailService {
         result += `${indent}${key}: ${value}\n`;
       }
     }
-    console.log(result);
     return result;
   }
 }
