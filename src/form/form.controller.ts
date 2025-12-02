@@ -24,6 +24,7 @@ export class FormController {
     try {
       await this.emailService.emailToInternetRegistrations(data);
     } catch (error) {
+      console.log(error);
       throw new BadRequestException('Something went wrong', {
         cause: new Error(),
         description: error.message,
@@ -35,6 +36,7 @@ export class FormController {
     try {
       await this.emailService.emailToInternetRegistrations(data);
     } catch (error) {
+      console.log(error);
       throw new BadRequestException('Something went wrong', {
         cause: new Error(),
         description: error.message,
@@ -47,6 +49,7 @@ export class FormController {
     try {
       await this.emailService.emailToInternetRegistrations(data);
     } catch (error) {
+      console.log(error);
       throw new BadRequestException('Something went wrong', {
         cause: new Error(),
         description: error.message,
@@ -60,6 +63,7 @@ export class FormController {
         data.buyOrRent === 'rent' ? 'Sales Valuation' : 'Lettings Valuation';
       await this.emailService.emailToInternetRegistrations(data, enquiryType);
     } catch (error) {
+      console.log(error);
       throw new BadRequestException('Something went wrong', {
         cause: new Error(),
         description: error.message,
@@ -89,6 +93,7 @@ export class FormController {
       await this.emailService.emailToInternetRegistrations(data, enquiryType);
       return valuationResults;
     } catch (error) {
+      console.log(error);
       throw new BadRequestException('Something went wrong', {
         cause: new Error(),
         description: error.message,
@@ -103,6 +108,7 @@ export class FormController {
         data.buyOrRent === 'rent' ? 'Sales' : 'Lettings';
       await this.emailService.emailToInternetRegistrations(data, enquiryType);
     } catch (error) {
+      console.log(error);
       throw new BadRequestException('Something went wrong', {
         cause: new Error(),
         description: error.message,
@@ -117,6 +123,7 @@ export class FormController {
         data.buyOrRent === 'rent' ? 'Sales' : 'Lettings';
       await this.emailService.emailToInternetRegistrations(data, enquiryType);
     } catch (error) {
+      console.log(error);
       throw new BadRequestException('Something went wrong', {
         cause: new Error(),
         description: error.message,
